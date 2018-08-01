@@ -4,7 +4,7 @@ import setuptools
 
 
 PACKAGE_NAME = 'cgi-proxy'
-FILE_NAME = PACKAGE_NAME.replace('-', '_') + '.py'
+FILE_NAME = PACKAGE_NAME + '/__init__.py'
 VERSION = re.search("__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME).read()).group(1)
 
 with open('README.md', 'r') as fh:

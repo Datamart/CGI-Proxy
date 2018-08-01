@@ -1,11 +1,18 @@
+import re
+
 import setuptools
+
+
+PACKAGE_NAME = 'cgi-proxy'
+FILE_NAME = PACKAGE_NAME.replace('-', '_') + '.py'
+VERSION = re.search("__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME).read()).group(1)
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='cgi-proxy',
-    version='10.26',
+    name=PACKAGE_NAME,
+    version=VERSION,
     description='The simple HTTP proxy.',
     long_description=long_description,
     long_description_content_type='text/markdown',

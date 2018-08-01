@@ -27,6 +27,7 @@ except ImportError:  # Python 3.x
     from urllib.parse import urlencode
 
 
+name = 'proxy'
 __version__ = '10.26'
 
 

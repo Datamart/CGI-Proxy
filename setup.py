@@ -5,7 +5,7 @@ import setuptools
 
 PACKAGE_NAME = 'cgi-proxy'
 FILE_NAME = PACKAGE_NAME + '/__init__.py'
-VERSION = re.search("__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME).read()).group(1)
+VERSION = re.search("__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME, 'r').read()).group(1)
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
@@ -21,7 +21,7 @@ setuptools.setup(
     # author_email='Valentin Podkamennyi <valentin@dtm.io>, Alex Krailo <alex@dtm.io>',
     license='Apache 2.0',
     packages=setuptools.find_packages(),
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
@@ -29,5 +29,5 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: Apache Software License',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    )
+    ]
 )

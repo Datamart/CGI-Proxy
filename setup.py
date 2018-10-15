@@ -3,8 +3,8 @@ import re
 import setuptools
 
 
-PACKAGE_NAME = 'cgi-proxy'
-FILE_NAME = PACKAGE_NAME + '/cgiproxy.py'
+PACKAGE_NAME = 'cgiproxy'
+FILE_NAME = PACKAGE_NAME + '/__init__.py'
 VERSION = re.search("__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME, 'r').read()).group(1)
 
 with open('README.md', 'r') as fh:

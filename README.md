@@ -7,5 +7,5 @@ Simple HTTP Proxy.
 Install from PyPI using `pip`:
 
 ```bash
-$ pip install cgi-proxy
+$ pip install cgiproxy
 ```

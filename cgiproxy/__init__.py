@@ -27,7 +27,7 @@ except ImportError:  # Python 3.x
     from urllib.parse import urlencode
 
 
-__version__ = '10.28'
+__version__ = '10.30'
 
 
 def do_get(url, headers=None):

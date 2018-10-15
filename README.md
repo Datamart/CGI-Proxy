@@ -1,6 +1,6 @@
-# CGI Proxy [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![PyPI Version](https://img.shields.io/pypi/v/cgi-proxy.svg)](https://pypi.org/project/cgi-proxy/) [![Python Versions](https://img.shields.io/pypi/pyversions/cgi-proxy.svg)](https://pypi.org/project/cgi-proxy/)
+# CGI Proxy [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![PyPI Version](https://img.shields.io/pypi/v/cgiproxy.svg)](https://pypi.org/project/cgiproxy/) [![Python Versions](https://img.shields.io/pypi/pyversions/cgiproxy.svg)](https://pypi.org/project/cgiproxy/)
 
-Simple HTTP Proxy.
+Simple CGI HTTP Proxy.
 
 # Installation
 

@@ -27,7 +27,7 @@ except ImportError:  # Python 3.x
     from urllib.parse import urlencode
 
 
-__version__ = '10.31'
+__version__ = '10.32'
 
 
 def do_get(url, headers=None):
@@ -172,9 +172,12 @@ def __get_request_headers(headers=None):
 
 def __get_user_agent():
     """Gets HTTP user agent."""
-    agent_name = os.path.basename(__file__).split('.')[0].capitalize()
+    module = os.path.basename(__file__).split('.')[0]
+    if module == '__init__':
+        module = os.path.dirname(__file__).split(os.sep)[-1]
+
     user_agent = 'Mozilla/5.0 (compatible; %s/%s) %s/%s' % (
-        platform.system(), platform.release(), agent_name, __version__)
+        platform.system(), platform.release(), module, __version__)
 
     return environ.get('HTTP_USER_AGENT') or user_agent
 

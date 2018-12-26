@@ -5,3 +5,6 @@ python:
   - "3.5"
   - "3.6"
 script: python ./cgiproxy/__init__.py
+notifications:
+  email:
+    recipients: dev@dtm.io

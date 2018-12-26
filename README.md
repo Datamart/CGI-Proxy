@@ -2,9 +2,9 @@
 
 Simple CGI HTTP Proxy.
 * Sets the `X-Forwarded-For` header with the client IP address;
-* Sets the `User-Agent` header with the client' `User-Agent` string.
-* Decodes `gzip`-ed content.
-* Prints all errors to `stderr`.
+* Sets the `User-Agent` header with the client' `User-Agent` string;
+* Decodes `gzip`-ed content;
+* Prints all errors to `stderr`;
 * Uses `urllib2` for Python 2 and `urllib.request` for Python 3.
 
 # Installation

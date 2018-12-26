@@ -4,4 +4,4 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-script: ./cgiproxy/__init__.py
+script: python ./cgiproxy/__init__.py

@@ -5,7 +5,7 @@ See:
     https://en.wikipedia.org/wiki/X-Forwarded-For
 """
 
-import os.path
+import os
 import platform
 import socket
 import sys
@@ -13,7 +13,6 @@ import sys
 from datetime import datetime
 from gzip import GzipFile
 from io import BytesIO as StringIO
-from os import environ
 
 try:  # Python 2.x
     import urllib2
@@ -27,7 +26,7 @@ except ImportError:  # Python 3.x
     from urllib.parse import urlencode
 
 
-__version__ = '10.32'
+__version__ = '18.12.25'
 
 
 def do_get(url, headers=None):
@@ -40,8 +39,8 @@ def do_get(url, headers=None):
     Returns:
         A tuple of (content, status_code, response_headers)
     """
-    headers = __get_request_headers(headers)
-    return __get_content('GET', url, headers)
+    headers = _get_request_headers(headers)
+    return _get_content('GET', url, headers)
 
 
 def do_post(url, data=None, headers=None):
@@ -55,7 +54,7 @@ def do_post(url, data=None, headers=None):
     Returns:
         A tuple of (content, status_code, response_headers)
     """
-    headers = __get_request_headers(headers)
+    headers = _get_request_headers(headers)
     if 'Content-Type' not in headers:
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
 
@@ -63,29 +62,77 @@ def do_post(url, data=None, headers=None):
         urlobj = urlparse(url)
         data = urlencode(parse_qs(urlobj.query)).encode('utf-8')
 
-    return __get_content('POST', url, headers, data)
+    return _get_content('POST', url, headers, data)
 
 
-def __error(message, error=None):
+def do_head(url, headers=None):
+    """Performs HEAD request.
+
+    Args:
+        url: The request URL as string.
+        headers: Optional HTTP request headers as dict.
+
+    Returns:
+        A tuple of (content, status_code, response_headers)
+    """
+    headers = _get_request_headers(headers)
+    return _get_content('HEAD', url, headers)
+
+
+def get_http_status(url, headers=None):
+    """Gets HTTP status code.
+
+    Args:
+        url: The request URL as string.
+        headers: Optional HTTP request headers as dict.
+
+    Returns:
+        An HTTP status code.
+    """
+    _, status, response_headers = do_head(url, headers)
+    redirect = response_headers.get('location')
+
+    if redirect:
+        return get_http_status(redirect, headers)
+    return status
+
+
+def get_response_headers(url, headers=None):
+    """Gets HTTP response headers.
+
+    Args:
+        url: The request URL as string.
+        headers: Optional HTTP request headers as dict.
+
+    Returns:
+        An HTTP response headers as dict.
+    """
+    response_headers = do_head(url, headers)[-1]
+    return response_headers
+
+
+def _error(message, error=None):
     """Prints error message to stderr.
 
     Args:
         message: The error message as string.
         error: Optional error object.
     """
+    # pylint:disable=protected-access
     frame = sys._getframe(1)
     name = frame.f_globals['__name__']  # __name__
     func = frame.f_back.f_code.co_name
     today = datetime.now()
     sys.stderr.write('[%s] [%s] [%s.%s] %s\n' % (
         today, 'ERROR', name, func, message))
+    # pylint:enable=protected-access
 
     if error:
         sys.stderr.write('[%s] [%s] [%s] %s\n' % (
             today, 'ERROR', error.__class__.__name__, error))
 
 
-def __get_content(method, url, headers, data=None):
+def _get_content(method, url, headers, data=None):
     """Gets a content, status code and response headers.
 
     Args:
@@ -98,25 +145,25 @@ def __get_content(method, url, headers, data=None):
         A tuple of (content, status_code, response_headers)
     """
     try:
-        response = __do_request(method, url, headers, data)
+        response = _do_request(method, url, headers, data)
     except urllib2.HTTPError as error:
-        __error('Could not load URL: %s' % url, error)
+        _error('Could not load URL: %s' % url, error)
         response = error
     except urllib2.URLError as error:
-        __error('Could not load URL: %s' % url, error)
+        _error('Could not load URL: %s' % url, error)
         response = None
 
     if response is not None:
         headers = response.info()
         headers = dict((key.lower(), value) for key, value in headers.items())
         status = response.getcode()
-        content = __decode_content(response.read(), headers)
+        content = _decode_content(response.read(), headers)
         response.close()
         return (content, status, headers)
     return ('', 500, None)
 
 
-def __do_request(method, url, headers=None, data=None):
+def _do_request(method, url, headers=None, data=None):
     """Gets a file-like object containing the data.
 
     Args:
@@ -143,7 +190,7 @@ def __do_request(method, url, headers=None, data=None):
     return opener.open(request)
 
 
-def __get_request_headers(headers=None):
+def _get_request_headers(headers=None):
     """Gets default HTTP request headers.
 
     Args:
@@ -159,33 +206,33 @@ def __get_request_headers(headers=None):
         headers['Accept-Encoding'] = 'gzip, deflate'
 
     if 'User-Agent' not in headers:
-        headers['User-Agent'] = __get_user_agent()
+        headers['User-Agent'] = _get_user_agent()
 
     if 'X-Forwarded-For' not in headers:
-        user_ip = __get_user_ip_address()
-        host_ip = __get_host_ip_address()
+        user_ip = _get_user_ip_address()
+        host_ip = _get_host_ip_address()
         if user_ip and host_ip:
             headers['X-Forwarded-For'] = user_ip + ', ' + host_ip
 
     return headers
 
 
-def __get_user_agent():
+def _get_user_agent():
     """Gets HTTP user agent."""
     module = os.path.basename(__file__).split('.')[0]
     if module == '__init__':
-        module = os.path.dirname(__file__).split(os.sep)[-1]
+        module = os.path.dirname(os.path.abspath(__file__)).split(os.sep)[-1]
 
     user_agent = 'Mozilla/5.0 (compatible; %s/%s) %s/%s' % (
         platform.system(), platform.release(), module, __version__)
 
-    return environ.get('HTTP_USER_AGENT') or user_agent
+    return os.environ.get('HTTP_USER_AGENT') or user_agent
 
 
-def __get_user_ip_address():
+def _get_user_ip_address():
     """Gets user's IP address."""
-    user_ip = environ.get('REMOTE_ADDR')
-    x_proxy = environ.get('HTTP_X_FORWARDED_FOR')
+    user_ip = os.environ.get('REMOTE_ADDR')
+    x_proxy = os.environ.get('HTTP_X_FORWARDED_FOR')
 
     if x_proxy:
         user_ip = x_proxy.split(',')[0]
@@ -193,19 +240,21 @@ def __get_user_ip_address():
     return user_ip
 
 
-def __get_host_ip_address():
+def _get_host_ip_address():
     """Gets server' IP address."""
+    # pylint:disable=broad-except
     host_ip = None
 
     try:
         host_ip = socket.gethostbyname(socket.gethostname())
     except Exception as error:
-        __error('Could not get server IP address.', error)
+        _error('Could not get server IP address.', error)
 
+    # pylint:enable=broad-except
     return host_ip
 
 
-def __decode_content(content, headers):
+def _decode_content(content, headers):
     """Decodes content."""
     # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
     encodings = headers.get('content-encoding', '').split(',')
@@ -224,14 +273,14 @@ def __decode_content(content, headers):
     # elif 'compress' in encodings: pass
     # elif 'deflate' in encodings: pass
 
-    charset = __get_charset(headers)
+    charset = _get_charset(headers)
     if charset is not None:
         content = content.decode(charset).encode('utf-8')
 
     return content.decode('utf-8')
 
 
-def __get_charset(headers):
+def _get_charset(headers):
     """Gets response charset.
 
     Args:
@@ -253,7 +302,62 @@ def __get_charset(headers):
 
 if __name__ == '__main__':
     # pylint:disable=superfluous-parens
-    print(do_get('https://www.dtm.io'))
-    print(__get_user_agent())
-    print(__get_user_ip_address())
-    print(__get_host_ip_address())
+    import unittest
+    class TestProxy(unittest.TestCase):
+        """Unittest test case."""
+        TEST_URL = 'https://komito.net/'
+        PRINT_OUTPUT = not False
+
+        def test_get_http_status(self):
+            """Tests 'get_http_status' method."""
+            status = get_http_status(self.TEST_URL)
+            self.assertEqual(200, status)
+            if self.PRINT_OUTPUT:
+                print('get_http_status: %s' % status)
+
+        def test_get_response_headers(self):
+            """Tests 'get_response_headers' method."""
+            headers = get_response_headers(self.TEST_URL)
+            self.assertEqual(dict, type(headers))
+            if self.PRINT_OUTPUT:
+                print('get_response_headers: %s' % str(headers))
+
+        def test_do_head(self):
+            """Tests 'do_head' method."""
+            content, status, headers = do_head(self.TEST_URL)
+            self.assertEqual('', content)
+            self.assertEqual(int, type(status))
+            self.assertEqual(dict, type(headers))
+            if self.PRINT_OUTPUT:
+                print('do_head: %s' % str((content, status, headers)))
+
+        def test_do_get(self):
+            """Tests 'do_get' method."""
+            content, status, headers = do_get(self.TEST_URL)
+            self.assertNotEqual('', content)
+            self.assertEqual(int, type(status))
+            self.assertGreaterEqual(status, 200)
+            self.assertEqual(dict, type(headers))
+
+        def test_get_user_agent(self):
+            """Tests '_get_user_agent' method."""
+            user_agent = _get_user_agent()
+            self.assertNotEqual('', user_agent)
+            if self.PRINT_OUTPUT:
+                print('_get_user_agent: %s' % user_agent)
+
+        def test_get_user_ip_address(self):
+            """Tests '_get_user_ip_address' method."""
+            ip_address = _get_user_ip_address()
+            self.assertNotEqual('', ip_address)
+            if self.PRINT_OUTPUT:
+                print('_get_user_ip_address: %s' % ip_address)
+
+        def test_get_host_ip_address(self):
+            """Tests '_get_host_ip_address' method."""
+            ip_address = _get_host_ip_address()
+            self.assertNotEqual('', ip_address)
+            if self.PRINT_OUTPUT:
+                print('_get_host_ip_address: %s' % ip_address)
+
+    unittest.main()

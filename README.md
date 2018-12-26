@@ -91,7 +91,7 @@ print(200 == status)
 print(headers.get('content-type'))
 
 content, status, headers = cgiproxy.do_get('https://www.dtm.io/', headers={
-    'User-Agent': 'Mozilla/5.0 (compatible; Darwin/18.2.0) /18.12',
+    'User-Agent': 'Mozilla/5.0 (compatible; Darwin/18.2.0) cgiproxy/18.12',
     'X-Custom-Header': 'value'
 })
 print('' != content)

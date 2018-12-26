@@ -1,4 +1,4 @@
-# CGI Proxy [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![PyPI Version](https://img.shields.io/pypi/v/cgiproxy.svg)](https://pypi.org/project/cgiproxy/) [![Python Versions](https://img.shields.io/pypi/pyversions/cgiproxy.svg)](https://pypi.org/project/cgiproxy/)
+# CGI Proxy [![Build Status](https://travis-ci.org/Datamart/CGI-Proxy.svg?branch=master)](https://travis-ci.org/Datamart/CGI-Proxy) [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![PyPI Version](https://img.shields.io/pypi/v/cgiproxy.svg)](https://pypi.org/project/cgiproxy/) [![Python Versions](https://img.shields.io/pypi/pyversions/cgiproxy.svg)](https://pypi.org/project/cgiproxy/)
 
 Simple CGI HTTP Proxy.
 * Sets the `X-Forwarded-For` header with the client IP address;

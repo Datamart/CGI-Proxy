@@ -306,7 +306,7 @@ if __name__ == '__main__':
     class TestProxy(unittest.TestCase):
         """Unittest test case."""
         TEST_URL = 'https://komito.net/'
-        PRINT_OUTPUT = not False
+        PRINT_OUTPUT = False
 
         def test_get_http_status(self):
             """Tests 'get_http_status' method."""

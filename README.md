@@ -7,7 +7,7 @@ Simple CGI HTTP Proxy.
 * Prints all errors to `stderr`;
 * Uses `urllib2` for Python 2 and `urllib.request` for Python 3.
 
-# Installation
+## Installation
 
 Install from PyPI using `pip`:
 
@@ -16,7 +16,7 @@ $ pip install cgiproxy
 ```
 
 
-# Methods
+## Methods
 
 ### do_get(url, headers=None)
 Performs `GET` request.
@@ -74,7 +74,7 @@ Gets HTTP response headers.
 * An HTTP response headers as `dict`.
 
 
-# Examples
+## Examples
 
 ```python
 import cgiproxy

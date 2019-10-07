@@ -155,7 +155,8 @@ def _get_content(method, url, headers, data=None):
 
     if response is not None:
         headers = response.info()
-        headers = dict((key.lower(), value) for key, value in headers.items())
+        # headers = dict((key.lower(), value) for key, value in headers.items())
+        headers = {key.lower(): value for key, value in headers.items()}
         status = response.getcode()
         content = _decode_content(response.read(), headers)
         response.close()
@@ -303,6 +304,7 @@ def _get_charset(headers):
 if __name__ == '__main__':
     # pylint:disable=superfluous-parens
     import unittest
+
     class TestProxy(unittest.TestCase):
         """Unittest test case."""
         TEST_URL = 'https://komito.net/'

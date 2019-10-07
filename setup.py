@@ -5,16 +5,17 @@ import setuptools
 
 PACKAGE_NAME = 'cgiproxy'
 FILE_NAME = PACKAGE_NAME + '/__init__.py'
-VERSION = re.search("__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME, 'r').read()).group(1)
+VERSION = re.search(
+    "__version__ = ['\"]([^'\"]+)['\"]", open(FILE_NAME, 'r').read()).group(1)
 
 with open('README.md', 'r') as fh:
-    long_description = fh.read()
+    LONG_DESCRIPTION = fh.read()
 
 setuptools.setup(
     name=PACKAGE_NAME,
     version=VERSION,
     description='The simple HTTP proxy.',
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     url='https://github.com/Datamart/CGI-Proxy',
     author='Valentin Podkamennyi, Alex Krailo',

@@ -276,7 +276,10 @@ def _decode_content(content, headers):
 
     charset = _get_charset(headers)
     if charset is not None:
-        content = content.decode(charset).encode('utf-8')
+        try:
+            content = content.decode(charset).encode('utf-8')
+        except UnicodeDecodeError as ex:
+            pass
 
     return content.decode('utf-8')
 

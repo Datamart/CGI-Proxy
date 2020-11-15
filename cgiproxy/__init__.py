@@ -278,7 +278,7 @@ def _decode_content(content, headers):
     if charset is not None:
         try:
             content = content.decode(charset).encode('utf-8')
-        except UnicodeDecodeError as ex:
+        except UnicodeDecodeError as ex: # pylint: disable=unused-variable
             pass
 
     return content.decode('utf-8')

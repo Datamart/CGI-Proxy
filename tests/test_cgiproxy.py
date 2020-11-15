@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(cwd, '..')))
 
 from cgiproxy import (_get_host_ip_address, _get_user_agent,
                       _get_user_ip_address, do_get, do_head, get_http_status,
-                      get_response_headers)
+                      get_response_headers)  # noqa: E402
 
 
 class TestProxy(unittest.TestCase):

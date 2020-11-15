@@ -5,7 +5,9 @@ import unittest
 cwd = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(cwd, '..')))
 
-from cgiproxy import *
+from cgiproxy import (_get_host_ip_address, _get_user_agent,
+                      _get_user_ip_address, do_get, do_head, get_http_status,
+                      get_response_headers)
 
 
 class TestProxy(unittest.TestCase):

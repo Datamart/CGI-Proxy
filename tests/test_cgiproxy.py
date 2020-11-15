@@ -1,6 +1,12 @@
-
+import os
+import sys
 import unittest
+
+cwd = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(cwd, '..')))
+
 from cgiproxy import *
+
 
 class TestProxy(unittest.TestCase):
     """Unittest test case."""

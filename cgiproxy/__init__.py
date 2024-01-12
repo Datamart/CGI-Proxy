@@ -146,6 +146,7 @@ def _get_content(method, url, headers, data=None):
     Returns:
         A tuple of (content, status_code, response_headers)
     """
+    # pylint:disable=consider-using-f-string
     try:
         response = _do_request(method, url, headers, data)
     except urllib2.HTTPError as error:
@@ -154,6 +155,7 @@ def _get_content(method, url, headers, data=None):
     except urllib2.URLError as error:
         _error('Could not load URL: %s' % url, error)
         response = None
+    # pylint:enable=consider-using-f-string
 
     if response is not None:
         headers = response.info()
@@ -226,8 +228,10 @@ def _get_user_agent():
     if module == '__init__':
         module = os.path.dirname(os.path.abspath(__file__)).split(os.sep)[-1]
 
+    # pylint:disable=consider-using-f-string
     user_agent = 'Mozilla/5.0 (compatible; %s/%s) %s/%s' % (
         platform.system(), platform.release(), module, __version__)
+    # pylint:enable=consider-using-f-string
 
     return os.environ.get('HTTP_USER_AGENT') or user_agent
 

@@ -191,7 +191,9 @@ def _do_request(method, url, headers=None, data=None):
     for header in headers:
         request.add_header(header, headers[header])
 
+    # pylint:disable=consider-using-f-string
     request.get_method = lambda: '%s' % method
+    # pylint:enable=consider-using-f-string
     return opener.open(request)
 
 

@@ -118,6 +118,7 @@ def _error(message, error=None):
         message: The error message as string.
         error: Optional error object.
     """
+    # pylint:disable=consider-using-f-string
     # pylint:disable=protected-access
     frame = sys._getframe(1)
     name = frame.f_globals['__name__']  # __name__
@@ -130,6 +131,7 @@ def _error(message, error=None):
     if error:
         sys.stderr.write('[%s] [%s] [%s] %s\n' % (
             today, 'ERROR', error.__class__.__name__, error))
+    # pylint:enable=consider-using-f-string
 
 
 def _get_content(method, url, headers, data=None):
